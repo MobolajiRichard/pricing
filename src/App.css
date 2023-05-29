@@ -1,34 +1,33 @@
 
 table tr:nth-child(even) {
   background-color: white;
-  color: black;
 
 }
 
-table tr td:not(nth-child(1)) {
-  background-color: white;
-  padding: 0 2%;
-  border:1px solid blue
-
-}
-table th:not(:nth-child(1)) {
-  background-color: white;
-  padding: 0 2%;
-  border:1px solid blue
-
+table tr:nth-child(odd) {
+  background-color: #f2f2f2;
 }
 
-table td + td, table th + th{
-  border:1px solid blue
-
+.pricing-table tr:nth-child(odd) {
+  background-color: #f9f9f9;
 }
 
-table{
-  border-collapse: collapse;
+table tr{
+  width: 100%;
+  height: 48px;
+  font-size: small;
+  margin-left: 62px;
+  padding-left: 62px;
 }
-.review-table-lightmode tr:nth-child(even) {
-  background-color: #3b6272;
+
+td{
+  padding-left: 62px;
 }
-.review-table-lightmode tr:nth-child(odd) {
-  background-color: #91a1ab;
+
+.pricing-table tr{
+  text-align: center;
+}
+
+.pricing-table td{
+  padding-left: 0;
 }
