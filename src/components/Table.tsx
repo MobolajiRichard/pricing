@@ -279,7 +279,7 @@ const Table = () => {
             {/* Regular */}
           <div className=" w-[225px] bg-white rounded-[10px]   ml-4">
             <div className="font-normal  px-[24%] py-[3.5%] flex flex-col items-center w-full relative h-[225px] ">
-              <p className="border-b border-red-200 border-dashed font-bold mb-4 w-full text-center">
+              <p className="border-b border-[#CE4A37] border-dashed font-bold mb-4 w-full text-center">
                 Regular
               </p>
               <div className="flex items-center text-sm">
@@ -353,7 +353,7 @@ const Table = () => {
           {/* Plus */}
           <div className=" w-[225px] bg-white rounded-[10px]  ml-4">
             <div className="font-normal  px-[24%] py-[3.5%] flex flex-col items-center w-full relative h-[225px]">
-              <p className="border-b border-red-200 border-dashed font-bold mb-4 w-full text-center">
+              <p className="border-b border-[#CE4A37] border-dashed font-bold mb-4 w-full text-center">
                 Plus
               </p>
               <div className="flex items-center text-sm">
@@ -425,7 +425,7 @@ const Table = () => {
           {/* Flexi */}
           <div className=" w-[225px] bg-white rounded-[10px]  ml-4">
             <div className="font-normal  px-[24%] py-[3.5%] flex flex-col items-center w-full relative h-[225px] ">
-              <p className="border-b border-red-200 border-dashed font-bold mb-4 w-full text-center">
+              <p className="border-b border-[#CE4A37] border-dashed font-bold mb-4 w-full text-center">
                 Flexi
               </p>
               <div className="flex items-center text-sm">
