@@ -9,9 +9,9 @@ const NativeCards = ({native}:{native:PlanPrice}) => {
           5 Classes
         </p>
         <div className="flex items-center text-sm">
-          <p>{getOldPrice(native?.price)} &yen;</p>
-          <p className="border border-black px-[4px] py-[1px] rounded-full font-bold ml-2">
-            -40%
+          <s className="text-[#505050]">{getOldPrice(native?.price)} &yen;</s>
+          <p className="border border-black px-[2px] md:px-[4px] py-[1px] rounded-full font-bold ml-2">
+            - 40%
           </p>
         </div>
         <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
@@ -23,7 +23,7 @@ const NativeCards = ({native}:{native:PlanPrice}) => {
 
     <div className="bg-[#F9F9F9] w-full rounded-bl-[10px] rounded-br-[10px] mt-2">
       <div className="flex items-center justify-center mb-4">
-        <s className="mr-2">
+        <s className="mr-2 opacity-40">
           {getOldPrice(native?.total_cost)} &yen;
         </s>{" "}
         <p className="font-bold">
@@ -31,7 +31,7 @@ const NativeCards = ({native}:{native:PlanPrice}) => {
         </p>
       </div>
       <div className=" justify-center flex items-center w-full pb-4 ">
-        <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl font-semibold text-md">
+        <button className="bg-[#FFAC01] py-2 px-12 text-[#111111] rounded-3xl font-semibold text-md">
           Proceed
         </button>
       </div>

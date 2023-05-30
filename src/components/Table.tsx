@@ -1,8 +1,6 @@
 import { useState, useEffect} from "react";
-import Check from "../assets/Check";
-import Dash from "../assets/Dash";
-import DownArrow from "../assets/DownArrow";
-import { LessonProp, ForeignPrices, NativePrices } from "../type";
+import {Check, Dash, DownArrow} from '../assets'
+import { ForeignPrices, NativePrices } from "../type";
 import { data, initialForeignPrice, initialNativePrice, getOldPrice, getPrice } from "../utils";
 import NativeCards from "./NativeCards";
 
@@ -10,7 +8,6 @@ const Table = () => {
   
   // states
   const [origin, setOrigin] = useState<string>("FOREIGNER");
-  const [originPlan, setOriginPlan] = useState<LessonProp[]>(data);
   const [nativePrice, setNativePrice] = useState<NativePrices>(initialNativePrice);
   const [foreignPrice, setForeignPrice] = useState<ForeignPrices>(initialForeignPrice);
   const [classes, setClasses] = useState<number>(5);
@@ -18,14 +15,13 @@ const Table = () => {
 
   //Logic
   useEffect(() => {
-    //on render, filter data based on origin and set the soted data to the originPlan
+    //on render, filter data based on origin and set the sorted data to the originPlan
     let filteredOrigin = data.filter((d) => d.type === origin)
-    setOriginPlan(filteredOrigin);
 
     if (origin === "FOREIGNER") {
     //filter originPlan data based on the duration and classes selected
-      let filteredForeignPlan = originPlan.filter((o) => o.duration === Number(duration) && o.nbLessons === Number(classes) );
-
+      let filteredForeignPlan = filteredOrigin.filter((o) => o.duration === Number(duration) && o.nbLessons === Number(classes) );
+      console.log(origin, filteredOrigin, filteredForeignPlan)
       //finding the regular, plus, flexi details 
       const regular = filteredForeignPlan.find((f) => f.plan === "REGULAR");
       const plus = filteredForeignPlan.find((f) => f.plan === "PLUS");
@@ -51,7 +47,7 @@ const Table = () => {
       setForeignPrice(price);
     } else {
          //filter originPlan data based on the duration and classes selected
-      let filteredNativePlan = originPlan.filter((o) => o.duration === Number(duration));
+      let filteredNativePlan = filteredOrigin.filter((o) => o.duration === Number(duration));
 
       //finding the five, ten, twenty, forty classes detaiils
       const five = filteredNativePlan.find((f) => f.nbLessons === 5);
@@ -268,7 +264,7 @@ const Table = () => {
         {origin === "FOREIGNER" && (
           <div className="flex flex-col items-start ml-[62px] mt-[45px]">
             <p className="font-semibold mb-2">Or, get a trial class:</p>
-            <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl font-semibold text-md">
+            <button className="bg-[#FFAC01] py-2 px-12 text-[#111111] rounded-3xl font-semibold text-md">
               Pay 500 &yen;
             </button>
           </div>
@@ -277,17 +273,17 @@ const Table = () => {
 
       {/* designs for the foreign cards */}
       {origin === "FOREIGNER" && (
-        <div className="md:absolute right-0 flex md:w-[60%] justify-between overflow-x-auto w-full">
+        <div className="md:absolute md:right-0 flex md:w-[60%] md:justify-between overflow-x-auto w-full mr-3 md:mr-0">
             {/* Regular */}
-          <div className=" w-[225px] bg-white rounded-[10px]   ml-4">
+          <div className=" w-[225px] bg-white rounded-[10px] ml-4">
             <div className="font-normal  px-[24%] py-[3.5%] flex flex-col items-center w-full relative h-[225px] ">
               <p className="border-b border-[#CE4A37] border-dashed font-bold mb-4 w-full text-center">
                 Regular
               </p>
               <div className="flex items-center text-sm">
-                <p>{getOldPrice(foreignPrice?.regular.price)} &yen;</p>
-                <p className="border border-black px-[4px] py-[1px] rounded-full font-bold ml-2">
-                  -40%
+                <s className="text-[#505050]">{getOldPrice(foreignPrice?.regular.price)} &yen;</s>
+                <p className="border border-black px-[2px] md:px-[4px] py-[1px] rounded-full font-bold ml-2">
+                  - 40%
                 </p>
               </div>
               <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
@@ -335,8 +331,9 @@ const Table = () => {
               </tr>
               <tr>
                 <td>
+                  <p className="hide">Total Cost:</p>
                   <div className="flex items-center justify-center">
-                    <s className="mr-2">
+                    <s className="mr-2 opacity-40">
                       {getOldPrice(foreignPrice?.regular.total_cost)} &yen;
                     </s>
                     <p className="font-bold">
@@ -348,7 +345,7 @@ const Table = () => {
                 </tbody>
             </table>
             <div className="bg-[#F9F9F9] justify-center flex items-center w-full pb-4 rounded-bl-[10px] rounded-br-[10px]">
-              <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl font-semibold text-md">
+              <button className="bg-[#FFAC01] py-2 px-12 text-[#111111] rounded-3xl font-semibold text-md">
                 Proceed
               </button>
             </div>
@@ -361,9 +358,9 @@ const Table = () => {
                 Plus
               </p>
               <div className="flex items-center text-sm">
-                <p>{getOldPrice(foreignPrice?.plus.price)} &yen;</p>
-                <p className="border border-black px-[4px] py-[1px] rounded-full font-bold ml-2">
-                  -40%
+                <s className="text-[#505050]">{getOldPrice(foreignPrice?.plus.price)} &yen;</s>
+                <p className="border border-black px-[2px] md:px-[4px] py-[1px] rounded-full font-bold ml-2">
+                  - 40%
                 </p>
               </div>
               <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
@@ -409,8 +406,9 @@ const Table = () => {
               </tr>
               <tr>
                 <td>
+                <p className="hide">Total Cost:</p>
                   <div className="flex items-center justify-center">
-                    <s className="mr-2">
+                    <s className="mr-2 opacity-40">
                       {getOldPrice(foreignPrice?.plus.total_cost)} &yen;
                     </s>{" "}
                     <p className="font-bold">
@@ -422,7 +420,7 @@ const Table = () => {
                 </tbody>
             </table>
             <div className="bg-[#F9F9F9] justify-center flex items-center w-full pb-4 rounded-bl-[10px] rounded-br-[10px]">
-              <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl font-semibold text-md">
+              <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl text-[#111111] font-semibold text-md">
                 Proceed
               </button>
             </div>
@@ -435,9 +433,9 @@ const Table = () => {
                 Flexi
               </p>
               <div className="flex items-center text-sm">
-                <p>{getOldPrice(foreignPrice?.flexi.price)} &yen;</p>
-                <p className="border border-black px-[4px] py-[1px] rounded-full font-bold ml-2">
-                  -40%
+                <s className="text-[#505050]">{getOldPrice(foreignPrice?.flexi.price)} &yen;</s>
+                <p className="border border-black px-[2px] md:px-[4px] py-[1px] rounded-full font-bold ml-2">
+                  - 40%
                 </p>
               </div>
               <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
@@ -483,8 +481,9 @@ const Table = () => {
               </tr>
               <tr>
                 <td>
+                <p className="hide">Total Cost:</p>
                   <div className="flex items-center justify-center">
-                    <s className="mr-2">
+                    <s className="mr-2 opacity-40">
                       {getOldPrice(foreignPrice?.flexi.total_cost)} &yen;
                     </s>{" "}
                     <p className="font-bold">
@@ -496,7 +495,7 @@ const Table = () => {
                 </tbody>
             </table>
             <div className="bg-[#F9F9F9] justify-center flex items-center w-full pb-4 rounded-bl-[10px] rounded-br-[10px]">
-              <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl font-semibold text-md">
+              <button className="bg-[#FFAC01] text-[#111111] py-2 px-12 rounded-3xl font-semibold text-md">
                 Proceed
               </button>
             </div>
@@ -518,7 +517,7 @@ const Table = () => {
       {origin === "FOREIGNER" && (
         <div className="flex flex-col items-start mt-[45px] md:hidden">
           <p className="font-semibold mb-2">Or, get a trial class:</p>
-          <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl font-semibold text-md">
+          <button className="bg-[#FFAC01] text-[#111111] py-2 px-12 rounded-3xl font-semibold text-md">
             Pay 500 &yen;
           </button>
         </div>
