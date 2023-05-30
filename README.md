@@ -4,6 +4,8 @@
     vite - bundler
 
 To start app,
+    npm install
+
     --development--
     npm run dev
 

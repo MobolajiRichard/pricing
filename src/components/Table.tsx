@@ -12,7 +12,7 @@ const Table = () => {
   const [duration, setDuration] = useState<number>(60);
 
   //manually passing in a default foreign and native plan based on the default class and duration 
-  //as the foreign plan won't exist unless event is fired in the DOM
+  //as the foreign and native plan will be initially empty unless event is fired in the DOM
   const [foreignPlan, setForeignPlan] = useState<DataProps[]>(defaultForeignPlan);
   const [nativePlan, setNativePlan] = useState<DataProps[]>(defaultNativePlan);
 
