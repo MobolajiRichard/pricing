@@ -288,7 +288,7 @@ const Table = () => {
                   -40%
                 </p>
               </div>
-              <p className="text-[#CE4A37] text-4xl font-bold my-2">
+              <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
                 {foreignPrice?.regular.price} &yen;
               </p>
               <p className="text-sm">per class</p>
@@ -362,7 +362,7 @@ const Table = () => {
                   -40%
                 </p>
               </div>
-              <p className="text-[#CE4A37] text-4xl font-bold my-2">
+              <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
                 {foreignPrice?.plus.price} &yen;
               </p>
               <p className="text-sm">per class</p>
@@ -434,7 +434,7 @@ const Table = () => {
                   -40%
                 </p>
               </div>
-              <p className="text-[#CE4A37] text-4xl font-bold my-2">
+              <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
                 {foreignPrice?.flexi.price} &yen;
               </p>
               <p className="text-sm">per class</p>
