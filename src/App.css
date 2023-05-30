@@ -16,8 +16,6 @@ table tr{
   width: 100%;
   height: 48px;
   font-size: small;
-  margin-left: 62px;
-  padding-left: 62px;
 }
 
 td{
@@ -26,8 +24,51 @@ td{
 
 .pricing-table tr{
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  margin: 0;
+  padding: 0;
+
 }
 
+
+/* hide and show table data based on screen size */
+.hide{
+  display: none;
+}
+
+.show{
+  display: block;
+}
+
+/* uesd for foreign cards rows */
 .pricing-table td{
   padding-left: 0;
+  
 }
+
+/* removing native select default designs */
+select{
+  appearance: none;
+  position: relative;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+
+/* tailwind doesn't have dispaly-none, switched to css cause table rows
+ can't be hidden with hidden property tailwind provides */
+@media (max-width:640px ) {
+  .hide{
+    display: block;
+  }
+  .show{
+    display: none;
+
+  }
+}
+
+
+
