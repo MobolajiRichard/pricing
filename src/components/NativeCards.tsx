@@ -7,12 +7,12 @@ const NativeCards = ({ native }: { native: DataProps }) => {
 
   //calculating the initial price
   const initial_price = getPrice(total_cost, nbLessons)
-  
+
   return (
-    <div className=" w-full bg-white rounded-[10px]  ml-4">
-      <div className="px-[24%]">
+    <div className=" w-full bg-white rounded-[10px] shadow-xl ml-4">
+      <div className="px-[12%]">
         <div className="font-normal   py-2 flex flex-col items-center w-full relative ">
-          <p className="border-b border-red-200 border-dashed font-bold mb-4 w-full text-center">
+          <p className="border-b border-red-200 border-dashed font-bold mb-4 w-full text-center text-[20px]">
             {nbLessons} Classes
           </p>
           <div className="flex items-center text-sm">
@@ -20,18 +20,18 @@ const NativeCards = ({ native }: { native: DataProps }) => {
               {getOldPrice(initial_price)} &yen;
             </s>
             <p className="border border-black px-[2px] md:px-[4px] py-[1px] rounded-full font-bold ml-2">
-              - 40%
+              -40%
             </p>
           </div>
-          <p className="text-[#CE4A37] text-4xl font-extrabold my-2">
+          <p className="text-[#CE4A37] text-[40px] leading-none font-extrabold my-2">
             {initial_price} &yen;
           </p>
           <p className="text-sm">per class</p>
         </div>
       </div>
 
-      <div className="bg-[#F9F9F9] w-full rounded-bl-[10px] rounded-br-[10px] mt-2">
-        <div className="flex items-center justify-center mb-4">
+      <div className=" w-full rounded-bl-[10px] rounded-br-[10px] mt-2">
+        <div className="bg-[#F9F9F9] h-[46px] flex items-center justify-center mb-2">
           <s className="mr-2 opacity-40">
             {getOldPrice(total_cost)} &yen;
           </s>
