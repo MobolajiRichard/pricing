@@ -238,6 +238,7 @@ const Table = () => {
         {/* benefits table for the plans, only if origin is FOREIGN */}
         {origin === "FOREIGNER" && (
           <table className="w-full mt-2">
+            <tbody>
             <tr>
               <td>Flexible schedule</td>
             </tr>
@@ -259,6 +260,7 @@ const Table = () => {
             <tr>
               <td>Total bundle costs</td>
             </tr>
+            </tbody>
           </table>
         )}
 
@@ -294,7 +296,8 @@ const Table = () => {
               <p className="text-sm">per class</p>
             </div>
             <table className="pricing-table w-full ">
-              <tr className="w-full">
+                <tbody>
+                <tr className="w-full">
                 <td className="show">
                   <Dash />
                 </td>
@@ -342,6 +345,7 @@ const Table = () => {
                   </div>
                 </td>
               </tr>
+                </tbody>
             </table>
             <div className="bg-[#F9F9F9] justify-center flex items-center w-full pb-4 rounded-bl-[10px] rounded-br-[10px]">
               <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl font-semibold text-md">
@@ -368,7 +372,8 @@ const Table = () => {
               <p className="text-sm">per class</p>
             </div>
             <table className="pricing-table w-full">
-              <tr className="w-full">
+                <tbody>
+                <tr className="w-full">
                 <td className="show">
                   <Check />
                 </td>
@@ -414,6 +419,7 @@ const Table = () => {
                   </div>
                 </td>
               </tr>
+                </tbody>
             </table>
             <div className="bg-[#F9F9F9] justify-center flex items-center w-full pb-4 rounded-bl-[10px] rounded-br-[10px]">
               <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl font-semibold text-md">
@@ -440,7 +446,8 @@ const Table = () => {
               <p className="text-sm">per class</p>
             </div>
             <table className="pricing-table w-full">
-              <tr className="w-full">
+                <tbody>
+                <tr className="w-full">
                 <td className="show">
                   <Check />
                 </td>
@@ -486,6 +493,7 @@ const Table = () => {
                   </div>
                 </td>
               </tr>
+                </tbody>
             </table>
             <div className="bg-[#F9F9F9] justify-center flex items-center w-full pb-4 rounded-bl-[10px] rounded-br-[10px]">
               <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl font-semibold text-md">
