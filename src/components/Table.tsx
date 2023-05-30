@@ -1,115 +1,88 @@
-import { useState, useEffect} from "react";
-import {Check, Dash, DownArrow} from '../assets'
-import { ForeignPrices, NativePrices } from "../type";
-import { data, initialForeignPrice, initialNativePrice, getOldPrice, getPrice } from "../utils";
+import { useState } from "react";
+import { DownArrow } from "../assets";
+import { data , defaultForeignPlan, defaultNativePlan} from "../utils";
+import ForeignerCards from "./Foreign/ForeignerCards";
 import NativeCards from "./NativeCards";
+import { DataProps } from "../type";
 
 const Table = () => {
-  
   // states
   const [origin, setOrigin] = useState<string>("FOREIGNER");
-  const [nativePrice, setNativePrice] = useState<NativePrices>(initialNativePrice);
-  const [foreignPrice, setForeignPrice] = useState<ForeignPrices>(initialForeignPrice);
   const [classes, setClasses] = useState<number>(5);
   const [duration, setDuration] = useState<number>(60);
 
-  //Logic
-  useEffect(() => {
-    //on render, filter data based on origin and set the sorted data to the originPlan
-    let filteredOrigin = data.filter((d) => d.type === origin)
+  //manually passing in a default foreign and native plan based on the default class and duration 
+  //as the foreign plan won't exist unless event is fired in the DOM
+  const [foreignPlan, setForeignPlan] = useState<DataProps[]>(defaultForeignPlan);
+  const [nativePlan, setNativePlan] = useState<DataProps[]>(defaultNativePlan);
+
+  const handleFilter = (classes:number, duration:number, origin:string) => {
+    //gilter data based on origin
+    let filteredOrigin = data.filter((d) => d.type === origin);
 
     if (origin === "FOREIGNER") {
-    //filter originPlan data based on the duration and classes selected
-      let filteredForeignPlan = filteredOrigin.filter((o) => o.duration === Number(duration) && o.nbLessons === Number(classes) );
-      console.log(origin, filteredOrigin, filteredForeignPlan)
-      //finding the regular, plus, flexi details 
-      const regular = filteredForeignPlan.find((f) => f.plan === "REGULAR");
-      const plus = filteredForeignPlan.find((f) => f.plan === "PLUS");
-      const flexi = filteredForeignPlan.find((f) => f.plan === "FLEXI");
-
-      //constructing  a price object based on the value gotten above
-      let price = {
-        regular: {
-          total_cost: regular?.price.primary,
-          price: getPrice(regular?.price.primary, regular?.nbLessons),
-        },
-        plus: {
-          total_cost: plus?.price.primary,
-          price: getPrice(plus?.price.primary, plus?.nbLessons),
-        },
-        flexi: {
-          total_cost: flexi?.price.primary,
-          price: getPrice(flexi?.price.primary, flexi?.nbLessons),
-        },
-      };
-
-      //setting the foreign price to the price gotten above
-      setForeignPrice(price);
+      //filter originPlan data based on the duration and classes selected
+      let filteredForeignPlan = filteredOrigin.filter(
+        (o) =>
+          o.duration === Number(duration) && o.nbLessons === Number(classes)
+      );
+      setForeignPlan(filteredForeignPlan);
     } else {
-         //filter originPlan data based on the duration and classes selected
-      let filteredNativePlan = filteredOrigin.filter((o) => o.duration === Number(duration));
-
-      //finding the five, ten, twenty, forty classes detaiils
-      const five = filteredNativePlan.find((f) => f.nbLessons === 5);
-      const ten = filteredNativePlan.find((f) => f.nbLessons === 10);
-      const twenty = filteredNativePlan.find((f) => f.nbLessons === 20);
-      const forty = filteredNativePlan.find((f) => f.nbLessons === 40);
-
-      //constructing  a price object based on the value gotten above
-      let price = {
-        five: {
-          total_cost: five?.price.primary,
-          price: getPrice(five?.price.primary, five?.nbLessons),
-        },
-        ten: {
-          total_cost: ten?.price.primary,
-          price: getPrice(ten?.price.primary, ten?.nbLessons),
-        },
-        twenty: {
-          total_cost: twenty?.price.primary,
-          price: getPrice(twenty?.price.primary, twenty?.nbLessons),
-        },
-        forty: {
-          total_cost: forty?.price.primary,
-          price: getPrice(forty?.price.primary, forty?.nbLessons),
-        },
-      };
-
-      //setting the foreign price to the price gotten above
-      setNativePrice(price);
+      //filter originPlan data based on the duration and classes selected
+      let filteredNativePlan = filteredOrigin.filter(
+        (o) => o.duration === Number(duration)
+      );
+      setNativePlan(filteredNativePlan);
     }
-  }, [origin, duration, classes]);
+  };
 
-  //update class state, on change of values
+  //update class state, on change of values filter the data
   const handleClassChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setClasses(Number(event.target.value));
+    //passing in the new class data to the filter function to ensure it fetches the correct data
+    handleFilter(Number(event.target.value), duration, origin);
   };
 
-  //update class state, on change of values
-  const handleDurationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  //update class state, on change of values  filter the data
+  const handleDurationChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setDuration(Number(event.target.value));
+    //passing in the new duration data to the filter function to ensure it fetches the correct data
+    handleFilter(classes, Number(event.target.value), origin);
   };
+
+  //update origin state, on change of values  filter the data
+  const handleOriginChange = (origin: string) => {
+    setOrigin(origin);
+    //passing in the new origin data to the filter function to ensure it fetches the correct data
+    handleFilter(classes, duration, origin);
+  };
+
 
   return (
     <div className="w-full flex flex-col font-source md:flex-row items-center md:items-start relative overflow-x-hidden h-full">
-      
       {/* responsively render the select options on top and it is in a small screen(mobile) */}
       <div className="md:hidden flex flex-col">
         {/* select origin buttons (mobile view) */}
-        <div className="flex items-center font-sans">
+        <div className="flex items-center font-bold">
           <p
-            className={`w-32 h-[39px] p-2 border-2 ${origin === "FOREIGNER"  ? "border-red-700"  : "border-gray-300 text-gray-300"} rounded-tl-lg rounded-bl-lg cursor-pointer`}
-            onClick={() => setOrigin("FOREIGNER")}
+            className={`w-32 h-[39px] text-center p-2 border-2 ${
+              origin === "FOREIGNER"
+                ? "border-red-700"
+                : "border-gray-300 text-gray-300"
+            } rounded-tl-lg rounded-bl-lg cursor-pointer`}
+            onClick={() => handleOriginChange("FOREIGNER")}
           >
             Foreigner
           </p>
           <p
-            className={`w-32 h-[39px] p-2 border-2  ${
+            className={`w-32 h-[39px] text-center p-2 border-2  ${
               origin === "NATIVE"
                 ? "border-red-700"
                 : "border-gray-300 text-gray-300"
             } rounded-tr-lg rounded-br-lg cursor-pointer`}
-            onClick={() => setOrigin("NATIVE")}
+            onClick={() => handleOriginChange("NATIVE")}
           >
             Native
           </p>
@@ -170,30 +143,30 @@ const Table = () => {
             origin === "FOREIGNER" ? "w-[27%]" : "w-full"
           }`}
         >
-      {/* select origin design (desktop view) */}
-          <div className="flex items-center font-sans">
+          {/* select origin design (desktop view) */}
+          <div className="flex items-center">
             <button
-              className={`w-32 h-[39px] p-2 border-2 ${
+              className={`w-32 h-[39px] p-2 border-2 text-center ${
                 origin === "FOREIGNER"
                   ? "border-red-700"
                   : "border-gray-300 text-gray-300"
               } rounded-tl-lg rounded-bl-lg cursor-pointer`}
-              onClick={() => setOrigin("FOREIGNER")}
+              onClick={() => handleOriginChange("FOREIGNER")}
             >
               Foreigner
             </button>
             <button
-              className={`w-32 h-[39px] p-2 border-2  ${
+              className={`w-32 h-[39px] p-2 border-2 text-center ${
                 origin === "NATIVE"
                   ? "border-red-700"
                   : "border-gray-300 text-gray-300"
               } rounded-tr-lg rounded-br-lg cursor-pointer`}
-              onClick={() => setOrigin("NATIVE")}
+              onClick={() => handleOriginChange("NATIVE")}
             >
               Native
             </button>
           </div>
-        {/* select classes and duration design desktop view */}
+          {/* select classes and duration design desktop view */}
           <div className="select flex flex-col items-start">
             <p className=" text-[#9f9f9f] mb-1 mt-4 text-sm">Class duration</p>
             <div className="bg-white h-[40px] mb-4 rounded-md px-4 flex items-center w-full outline-none border-none">
@@ -235,32 +208,32 @@ const Table = () => {
         {origin === "FOREIGNER" && (
           <table className="w-full mt-2">
             <tbody>
-            <tr>
-              <td>Flexible schedule</td>
-            </tr>
-            <tr>
-              <td>Reschedule class</td>
-            </tr>
-            <tr>
-              <td>Free consultations</td>
-            </tr>
-            <tr>
-              <td>Internal credits</td>
-            </tr>
-            <tr>
-              <td>Bonus program</td>
-            </tr>
-            <tr>
-              <td>Referral program</td>
-            </tr>
-            <tr>
-              <td>Total bundle costs</td>
-            </tr>
+              <tr>
+                <td>Flexible schedule</td>
+              </tr>
+              <tr>
+                <td>Reschedule class</td>
+              </tr>
+              <tr>
+                <td>Free consultations</td>
+              </tr>
+              <tr>
+                <td>Internal credits</td>
+              </tr>
+              <tr>
+                <td>Bonus program</td>
+              </tr>
+              <tr>
+                <td>Referral program</td>
+              </tr>
+              <tr>
+                <td>Total bundle costs</td>
+              </tr>
             </tbody>
           </table>
         )}
 
-      {/* conditionally render the pay button under the table if the origin is foreigner and it is in a big screen(mobile) */}
+        {/* conditionally render the pay button under the table if the origin is foreigner and it is in a big screen(mobile) */}
         {origin === "FOREIGNER" && (
           <div className="flex flex-col items-start ml-[62px] mt-[45px]">
             <p className="font-semibold mb-2">Or, get a trial class:</p>
@@ -274,242 +247,18 @@ const Table = () => {
       {/* designs for the foreign cards */}
       {origin === "FOREIGNER" && (
         <div className="md:absolute md:right-0 flex md:w-[60%] md:justify-between overflow-x-auto w-full mr-3 md:mr-0">
-            {/* Regular */}
-          <div className=" w-[225px] bg-white rounded-[10px] ml-4">
-            <div className="font-normal  px-[24%] py-[3.5%] flex flex-col items-center w-full relative h-[225px] ">
-              <p className="border-b border-[#CE4A37] border-dashed font-bold mb-4 w-full text-center">
-                Regular
-              </p>
-              <div className="flex items-center text-sm">
-                <s className="text-[#505050]">{getOldPrice(foreignPrice?.regular.price)} &yen;</s>
-                <p className="border border-black px-[2px] md:px-[4px] py-[1px] rounded-full font-bold ml-2">
-                  - 40%
-                </p>
-              </div>
-              <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
-                {foreignPrice?.regular.price} &yen;
-              </p>
-              <p className="text-sm">per class</p>
-            </div>
-            <table className="pricing-table w-full ">
-                <tbody>
-                <tr className="w-full">
-                <td className="show">
-                  <Dash />
-                </td>
-                <td className="hide text-[#C1C1C1]">Flexible schedule</td>
-              </tr>
-              <tr className="w-full">
-                <td className="show">
-                  <Dash />
-                </td>
-                <td className="hide text-[#C1C1C1]">Reschedule class</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Dash />
-                </td>
-                <td className="hide text-[#C1C1C1]">Free consultations</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Check />
-                </td>
-                <td className="hide ">Internal credits</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Dash />
-                </td>
-                <td className="hide text-[#C1C1C1]">Bonus program</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Dash />
-                </td>
-                <td className="hide text-[#C1C1C1]">Referral program</td>
-              </tr>
-              <tr>
-                <td>
-                  <p className="hide">Total Cost:</p>
-                  <div className="flex items-center justify-center">
-                    <s className="mr-2 opacity-40">
-                      {getOldPrice(foreignPrice?.regular.total_cost)} &yen;
-                    </s>
-                    <p className="font-bold">
-                      {foreignPrice?.regular.total_cost} &yen;
-                    </p>
-                  </div>
-                </td>
-              </tr>
-                </tbody>
-            </table>
-            <div className="bg-[#F9F9F9] justify-center flex items-center w-full pb-4 rounded-bl-[10px] rounded-br-[10px]">
-              <button className="bg-[#FFAC01] py-2 px-12 text-[#111111] rounded-3xl font-semibold text-md">
-                Proceed
-              </button>
-            </div>
-          </div>
-
-          {/* Plus */}
-          <div className=" w-[225px] bg-white rounded-[10px]  ml-4">
-            <div className="font-normal  px-[24%] py-[3.5%] flex flex-col items-center w-full relative h-[225px]">
-              <p className="border-b border-[#CE4A37] border-dashed font-bold mb-4 w-full text-center">
-                Plus
-              </p>
-              <div className="flex items-center text-sm">
-                <s className="text-[#505050]">{getOldPrice(foreignPrice?.plus.price)} &yen;</s>
-                <p className="border border-black px-[2px] md:px-[4px] py-[1px] rounded-full font-bold ml-2">
-                  - 40%
-                </p>
-              </div>
-              <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
-                {foreignPrice?.plus.price} &yen;
-              </p>
-              <p className="text-sm">per class</p>
-            </div>
-            <table className="pricing-table w-full">
-                <tbody>
-                <tr className="w-full">
-                <td className="show">
-                  <Check />
-                </td>
-                <td className="hide ">Flexible schedule</td>
-              </tr>
-              <tr>
-                <td>4 times a month</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Dash />
-                </td>
-                <td className="hide text-[#C1C1C1]">Free consultations</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Check />
-                </td>
-                <td className="hide ">Internal credits</td>
-              </tr>
-
-              <tr>
-                <td className="show">
-                  <Check />
-                </td>
-                <td className="hide ">Bonus program</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Check />
-                </td>
-                <td className="hide ">Referral program</td>
-              </tr>
-              <tr>
-                <td>
-                <p className="hide">Total Cost:</p>
-                  <div className="flex items-center justify-center">
-                    <s className="mr-2 opacity-40">
-                      {getOldPrice(foreignPrice?.plus.total_cost)} &yen;
-                    </s>{" "}
-                    <p className="font-bold">
-                      {foreignPrice?.plus.total_cost} &yen;
-                    </p>
-                  </div>
-                </td>
-              </tr>
-                </tbody>
-            </table>
-            <div className="bg-[#F9F9F9] justify-center flex items-center w-full pb-4 rounded-bl-[10px] rounded-br-[10px]">
-              <button className="bg-[#FFAC01] py-2 px-12 rounded-3xl text-[#111111] font-semibold text-md">
-                Proceed
-              </button>
-            </div>
-          </div>
-
-          {/* Flexi */}
-          <div className=" w-[225px] bg-white rounded-[10px]  ml-4">
-            <div className="font-normal  px-[24%] py-[3.5%] flex flex-col items-center w-full relative h-[225px] ">
-              <p className="border-b border-[#CE4A37] border-dashed font-bold mb-4 w-full text-center">
-                Flexi
-              </p>
-              <div className="flex items-center text-sm">
-                <s className="text-[#505050]">{getOldPrice(foreignPrice?.flexi.price)} &yen;</s>
-                <p className="border border-black px-[2px] md:px-[4px] py-[1px] rounded-full font-bold ml-2">
-                  - 40%
-                </p>
-              </div>
-              <p className="text-[#CE4A37] text-3xl md:text-4xl font-bold my-2">
-                {foreignPrice?.flexi.price} &yen;
-              </p>
-              <p className="text-sm">per class</p>
-            </div>
-            <table className="pricing-table w-full">
-                <tbody>
-                <tr className="w-full">
-                <td className="show">
-                  <Check />
-                </td>
-                <td className="hide ">Flexible schedule</td>
-              </tr>
-              <tr>
-                <td>No limits</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Dash />
-                </td>
-                <td className="hide">Free consultations</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Check />
-                </td>
-                <td className="hide ">Internal credits</td>
-              </tr>
-
-              <tr>
-                <td className="show">
-                  <Check />
-                </td>
-                <td className="hide ">Bonus program</td>
-              </tr>
-              <tr>
-                <td className="show">
-                  <Check />
-                </td>
-                <td className="hide ">Referral program</td>
-              </tr>
-              <tr>
-                <td>
-                <p className="hide">Total Cost:</p>
-                  <div className="flex items-center justify-center">
-                    <s className="mr-2 opacity-40">
-                      {getOldPrice(foreignPrice?.flexi.total_cost)} &yen;
-                    </s>{" "}
-                    <p className="font-bold">
-                      {foreignPrice?.flexi.total_cost} &yen;
-                    </p>
-                  </div>
-                </td>
-              </tr>
-                </tbody>
-            </table>
-            <div className="bg-[#F9F9F9] justify-center flex items-center w-full pb-4 rounded-bl-[10px] rounded-br-[10px]">
-              <button className="bg-[#FFAC01] text-[#111111] py-2 px-12 rounded-3xl font-semibold text-md">
-                Proceed
-              </button>
-            </div>
-          </div>
+          {foreignPlan.map((f, i) => (
+            <ForeignerCards foreign={f} key={i} />
+          ))}
         </div>
       )}
 
       {/* item to display when origin is native */}
       {origin === "NATIVE" && (
         <div className="flex items-start md:w-[80%] overflow-x-auto w-full">
-          <NativeCards native={nativePrice.five}/>
-          <NativeCards native={nativePrice.ten}/>
-          <NativeCards native={nativePrice.twenty}/>
-          <NativeCards native={nativePrice.forty}/>
+          {nativePlan.map((n, i) => (
+            <NativeCards key={i} native={n} />
+          ))}
         </div>
       )}
 

@@ -1,16 +1,23 @@
-  export type PlanPrice = {
+  
+  export type ForeignTable = {
     total_cost:number | undefined;
-    price:number | undefined
-  }
-  export type ForeignPrices ={
-    flexi:PlanPrice;
-    plus:PlanPrice;
-    regular:PlanPrice
+    type:string
   }
 
-  export type NativePrices ={
-    five:PlanPrice;
-    ten:PlanPrice;
-    twenty:PlanPrice;
-    forty:PlanPrice
-  }
+  export type DataProps = {
+    nbLessons: number;
+    duration: number;
+    label: {
+        ru: string;
+        en: string;
+    };
+    description: string;
+    plan: string | null;
+    type: string;
+    price: {
+        primary: number;
+        secondary: number | null;
+    };
+} 
+  
+ 
