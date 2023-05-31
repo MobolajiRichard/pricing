@@ -1,17 +1,14 @@
-import data from "./data.json";
+import data from "./data";
 
-//function to calculate old price
-const getOldPrice = (price?: number) => {
+export const getOldPrice = (price?: number) => {
   if (!price) {
     return 0;
   } else {
-    let old_price = price * 0.4 + price;
-    return old_price;
+    return price * 0.4 + price;
   }
 };
 
-//function to calculate price
-const getPrice = (price?: number, nbLesson?: number) => {
+export const getPrice = (price?: number, nbLesson?: number) => {
   if (!price || !nbLesson) {
     return 0;
   } else {
@@ -19,8 +16,7 @@ const getPrice = (price?: number, nbLesson?: number) => {
   }
 };
 
-//default foreign plan based on default class and duration
-const defaultForeignPlan = [
+export const defaultForeignPlan = [
   {
     description: "5 classes (FOREIGNER + REGULAR)",
     duration: 60,
@@ -50,44 +46,42 @@ const defaultForeignPlan = [
   },
 ];
 
-//default native plan based on default class and duration
-const defaultNativePlan = [
+export const DURATION_OPTIONS = [
   {
-    description: "5 classes (NATIVE)",
-    duration: 60,
-    label: { ru: "5 уроков", en: "5 classes" },
-    nbLessons: 5,
-    plan: null,
-    price: { primary: 1500, secondary: 12500 },
-    type: "NATIVE",
+    value: 25,
+    label: "25 minutes",
   },
   {
-    description: "10 classes (NATIVE)",
-    duration: 60,
-    label: { ru: "10 уроков", en: "10 classes" },
-    nbLessons: 10,
-    plan: null,
-    price: { primary: 2800, secondary: 24000 },
-    type: "NATIVE",
+    value: 45,
+    label: "45 minutes",
   },
   {
-    description: "20 classes (NATIVE)",
-    duration: 60,
-    label: { ru: "20 уроков", en: "20 classes" },
-    nbLessons: 20,
-    plan: null,
-    price: { primary: 5400, secondary: 46000 },
-    type: "NATIVE",
+    value: 60,
+    label: "60 minutes",
   },
   {
-    description: "40 classes (NATIVE)",
-    duration: 60,
-    label: { ru: "40 уроков", en: "40 classes" },
-    nbLessons: 40,
-    plan: null,
-    price: { primary: 10000, secondary: 88000 },
-    type: "NATIVE",
+    value: 90,
+    label: "90 minutes",
   },
 ];
 
-export { data, defaultForeignPlan, defaultNativePlan, getOldPrice, getPrice };
+export const NB_CLASSES_OPTIONS = [
+  {
+    value: 5,
+    label: "5 classes",
+  },
+  {
+    value: 10,
+    label: "10 classes",
+  },
+  {
+    value: 20,
+    label: "20 classes",
+  },
+  {
+    value: 40,
+    label: "40 classes",
+  },
+];
+
+export { data };
